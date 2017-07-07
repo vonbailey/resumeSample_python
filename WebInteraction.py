@@ -18,23 +18,21 @@ class startMe():
             try:
                 # Creating menus and acccepting Menu selection
                 if(ms==0): #Display the first menu for getting the search engine used
-                    y=Utility.Menu.menuItems(True,0,theLogFile)
-                elif(ms==1):#Display the second menu for getting the browser used
                     y=Utility.Menu.menuItems(True,1,theLogFile)
+                else:#Display the second menu for getting the browser used
+                    y=Utility.Menu.menuItems(True,2,theLogFile)
                 # Validating that the menu options entered are valid
                 x=Utility.Menu.validate_MenuItem(True,y,theLogFile)
                 # If the user chooses to quit at this time.  Exit the application
                 if(y.upper()==Utility.GenericSyntax.quit(True) or x==False):
-                    LogFile.loggingData.writeLog(True, theLogFile,Utility.ErrorSyntax.validate_MenuItem(True,y))
-                    os._exit(0)
+                    self.getOUT(True)
                 # Log the menu selection made
                 LogFile.loggingData.writeLog(True,theLogFile,Utility.GenericSyntax.Success(True,"Menu Item: ",1)+str(ms))
                 # Return menu selection made
                 return y
             except:
                 print(Utility.ErrorSyntax.menuError(True),theDir)
-                LogFile.loggingData.writeLog(True,theLogFile,Utility.ErrorSyntax.menuError(True))
-                os._exit(0)
+                self.getOUT(True)
 
     def doDataCollection(self,u,theLogFile,theDir):
         if self:
@@ -72,6 +70,10 @@ class startMe():
             except:
                 e=Utility.ErrorSyntax.mainError(True)
                 LogFile.loggingData.writeLog(True,theLogFile,e)
+    
+    def getOUT(self):
+        LogFile.loggingData.writeLog(x,theLogFile,Utility.GenericSyntax.quitMsg(True),)
+        os._exit(0)
 
 # Creating log file and directory
 dirComp=[]
@@ -85,23 +87,35 @@ LogFile.loggingData.writeLog(True,theLogFile,Utility.ProgData.log_Header(True))
 #Adding header to log
 LogFile.loggingData.writeLog(x,theLogFile,Utility.GenericSyntax.logTitles(True,0))
 
-mi=0 # Getting the values to define the Search Engine and browser.
-while (mi<2):  
-    m1=startMe.doMenu2(y,mi,theLogFile,theDir)
-    if(mi==0):
-        u=m1 # assigning Search Engine
-    else:
-        b=m1 # assigning browser
-    mi=mi+1
+# Doing the menus
+mo=Utility.Menu.menuItems(True,0,theLogFile)
+if(mo=="0"):
+    print("This is where the functions for validating a password goes")
+    startMe.getOUT(True)
+elif(mo=="1"):
+    print("This is where the functions for counting images on a given URL")
+    startMe.getOUT(True)
+elif(mo=="2"):
+    mi=0 # Setting up menus and gather menu options.
+    while (mi<2):  
+        m1=startMe.doMenu2(y,mi,theLogFile,theDir)
+        if(mi==0):
+            u=m1 # assigning Search Engine
+        else:
+            b=m1 # assigning browser
+        mi=mi+1
+    LogFile.loggingData.writeLog(x,theLogFile,Utility.GenericSyntax.logTitles(True,1))
+    se=Utility.ProgData.searchEngines(True,int(u))  # Assigning search engine
+    dc=[];dc=startMe.doDataCollection(True,u,theLogFile,theDir) # getting theURL and the Search Criteria
+    LogFile.loggingData.writeLog(True,theLogFile,Utility.GenericSyntax.logTitles(True,2))
+    startMe.Main(y,dc[0],dc[1],se,u,theLogFile,theDir)
+    startMe.getOUT(True)
+elif(mo.upper()=='Q'):
+    startMe.getOUT(True)
+else:
+    LogFile.loggingData.writeLog(True,theLogFile,"Invalid selection: "+mo)
+    startMe.getOUT(True)
+    
 
-LogFile.loggingData.writeLog(x,theLogFile,Utility.GenericSyntax.logTitles(True,1))
-se=Utility.ProgData.searchEngines(True,int(u))  # Assigning search engine
-dc=[];dc=startMe.doDataCollection(True,u,theLogFile,theDir) # getting theURL and the Search Criteria
-###########################
-#RUNNING THE APPLICATION
-LogFile.loggingData.writeLog(True,theLogFile,Utility.GenericSyntax.logTitles(True,2))
-startMe.Main(y,dc[0],dc[1],se,u,theLogFile,theDir)
 
-# Exiting program
-LogFile.loggingData.writeLog(x,theLogFile,Utility.GenericSyntax.quitMsg(True),)
 

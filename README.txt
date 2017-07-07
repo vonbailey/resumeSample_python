@@ -38,7 +38,7 @@ Discover why it's erroring out and resolve.***SOLUTION - Add booleen True at to 
 	***SOLUTION - Was searching URL instead of page source.  Changed value to pages source and it works now.***
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++	
 CURRENT DEVELOPMENT:
-1) Create another menu that calls the current program and include it as an option.  In the new menu add the following:
+1) COMPLETE:  Create another menu that calls the current program and include it as an option.  In the new menu add the following:
 	a) The ability to count the images on any given page.
 	b) Validate Passwords
 2) Create functionality to perform 1a

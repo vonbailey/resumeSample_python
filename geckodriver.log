@@ -122,3 +122,11 @@ JavaScript error: resource://gre/modules/osfile/osfile_async_front.jsm, line 412
 1499387925777	geckodriver::marionette	INFO	Starting browser C:\Program Files (x86)\Mozilla Firefox\firefox.exe with args ["-marionette"]
 1499387928573	Marionette	INFO	Listening on port 50218
 1499387928992	Marionette	WARN	TLS certificate errors will be ignored for this session
+1499390946585	geckodriver	INFO	Listening on 127.0.0.1:54841
+1499390948676	geckodriver::marionette	INFO	Starting browser C:\Program Files (x86)\Mozilla Firefox\firefox.exe with args ["-marionette"]
+1499390951481	Marionette	INFO	Listening on port 54856
+1499390951876	Marionette	WARN	TLS certificate errors will be ignored for this session
+1499394733473	geckodriver	INFO	Listening on 127.0.0.1:61706
+1499394735576	geckodriver::marionette	INFO	Starting browser C:\Program Files (x86)\Mozilla Firefox\firefox.exe with args ["-marionette"]
+1499394740285	Marionette	INFO	Listening on port 61713
+1499394740797	Marionette	WARN	TLS certificate errors will be ignored for this session

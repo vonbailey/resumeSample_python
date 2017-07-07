@@ -47,6 +47,8 @@ class ProgData:
         if self:
             try:
                 if(i==0):
+                    mItem= input("***General Menu***\n0= Validate Password Test\n1= Count images on given URL\n2= Count images in search results \nQ= Quit Program\n>>> ");
+                elif(i==1):
                     mItem= input("***Pick a Search Engine***\n0= Google\n1= Bing\n2= Yahoo \nQ= Quit Program\n>>> ");
                 else:
                     mItem= input("***Pick a Browser***\n0= IE\n1= Chrome\n2= Firefox\nQ= Quit Program\n>>> ");
@@ -91,12 +93,13 @@ class Menu():
     def validate_MenuItem(self,x,theLogFile):
         try:
             c=0
+            x=x.upper()
             validate = False
-            mChoices=['0','1','2'] # Only valid options
-            while c < 3:
+            mChoices=['0','1','2','Q'] # Only valid options
+            while c < 4:
                 if(x==mChoices[c]):
                     validate=True
-                    c=4  # Found it.  
+                    c=5  # Found it.  
                 else:
                     c=c+1 # Still looking
             if(validate==True):
