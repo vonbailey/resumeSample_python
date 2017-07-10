@@ -9,6 +9,21 @@ import time
 class ProgData:
     pData=True
     # Version of the App
+    def getIN(self):
+        return['orangehat@fakeEmail.com', 'bodevon#1123',
+               'orangehatfakeEmail.com','bodevon#1123',
+               'orangehat@fakeEmail.com', 'bodevon1123',
+               'orangehatfakeEmail.com', 'bodevon1123',
+               ' ',' ']
+        
+    def getCredlbl(self):
+        return["Entering the correct credentials-",
+               "Enter bad login-","Enter bad Password-",
+               "Enter bad password and bad login-",
+               "Enter no login and no password-",
+               "Confirmation Page",': ***PASSED***','  ERROR: FAILED',
+               'errmsg','Automated Password Verification Demo']
+    
     def versioning(self):
         return "3.0"  # Optimized logging process and added saving an image of the search results in the log folder.
 
@@ -32,10 +47,10 @@ class ProgData:
         i=input("****Please Enter Your Search Criteria****\nEnter 'QUIT' in upper case to quit the program\n>>> ");
         return i;
 
-    def browsers(self):
+    def browsers(self,x):
         # Browsers
         i=["Internet Explorer","Chrome","Firefox"];
-        return i;
+        return i[x];
     
     def imageFiles(self):
         # Image file types
@@ -113,6 +128,12 @@ class Menu():
 
 class GenericSyntax():
     gs=True
+    
+    def procCredsError(self,x):
+        pre='ERROR: function '
+        pce=[pre+'passCreds()',pre+'getCredFields()',pre+'enterCreds()',pre+'mkFileName()']
+        return pce[x]
+    
     def images(self):
         return " images:"
 
@@ -120,7 +141,7 @@ class GenericSyntax():
         return " Instances of the search criteria: "
 
     def SynRnProg(self,URL,Browser,SC):
-        return " Browser URL: "+ URL+" | Selected Browser:  "+Browser+" | Search Criteria:  "+ SC
+        return [" Browser URL: "+ URL+" | Selected Browser:  "+Browser+" | Search Criteria:  "+ SC," \r Are the selections above correct? (Y/N)"]
 
     def Failure(self,txt,pk):
         if(pk==0):
@@ -174,6 +195,18 @@ class TheURL():
         if(i>2 or i< 0): return str(i) # takes care of bad selection
         urlsList=ProgData.webSites(True)
         return urlsList[i]
+    
+    def getUrlValues(self):
+        return["Please Enter the URL with which you wish to work.\r i.e. 'www.domain_name.com':  ","Bad Extension:  ","Counting the images for: ","http://","www.thecityofkothos.com/resume/index.html"]
+        
+    def imageExtensions(self):
+        return [".com",".de",".cn",".net",".uk",".org",".info",".nl",".eu","ru"]
+    
+    def validateURL(self,cURL,ext):
+        for i in range(0,9):
+            if(ext[i] in cURL):
+                return True
+        return  False  
 
 class Browsers():
     br=True
@@ -184,6 +217,9 @@ class Browsers():
 
 class ErrorSyntax():
     ers=True
+    def givenURLError(self):
+        return "ERROR:  Bad URL given: "
+    
     def missingSC(self,sc):
         # Error when nothing on the search results page matches the search criteria
         return "WARNING:  Could not find an instance of the search criteria '"+sc+"' in the search results."
@@ -213,19 +249,19 @@ class ErrorSyntax():
 
     def mainError(self):
         # Error if there is an issue after all variables have been set and it's not a menu issue.
-        return "ERROR: Failed Main()"
+        return "ERROR: Failed doSearchEngine()"
         
     def dataColletion(self):
         # Error collecting data to run the application
         return "ERROR: Failed Main_DataColletion()"
 
-    def setBrowserError(self,b,theName):
+    def setBrowserError(self,b):
         # Error gathering information regarding setting up the browser.
-        return "ERROR: Failed setBrowser("+b+","+theName+")"
+        return "ERROR: Failed setBrowser("+b+")"
 
-    def openBrowserError(self,theName):
+    def openBrowserError(self):
         # # Error opening the browser.
-        return "ERROR: Failed openBrowser(Browser"+theName+")"
+        return "ERROR: Failed openBrowser()"
 
     def countAspectsError(self,url):
         # Error counting images in the HTTP request

@@ -11,8 +11,15 @@ import os
 import LogFile
 
 
+class leaving():
+    def getOUT(self):
+        if self:
+            LogFile.loggingData.writeLog(x,theLogFile,Utility.GenericSyntax.quitMsg(True),)
+            os._exit(0)
+
 class startMe():
     menu=True
+            
     def doMenu2(self,ms,theLogFile,theDir):
         if self:
             try:
@@ -25,14 +32,16 @@ class startMe():
                 x=Utility.Menu.validate_MenuItem(True,y,theLogFile)
                 # If the user chooses to quit at this time.  Exit the application
                 if(y.upper()==Utility.GenericSyntax.quit(True) or x==False):
-                    self.getOUT(True)
+                    if(x==False):
+                        LogFile.loggingData.writeLog(True,theLogFile,Utility.GenericSyntax.Failure(True, y, 3))
+                    leaving.getOUT(True)
                 # Log the menu selection made
                 LogFile.loggingData.writeLog(True,theLogFile,Utility.GenericSyntax.Success(True,"Menu Item: ",1)+str(ms))
                 # Return menu selection made
                 return y
             except:
                 print(Utility.ErrorSyntax.menuError(True),theDir)
-                self.getOUT(True)
+                leaving.getOUT(True)
 
     def doDataCollection(self,u,theLogFile,theDir):
         if self:
@@ -48,32 +57,33 @@ class startMe():
                 return [gotURL, gotSC]
             except:
                 print(Utility.ErrorSyntax.dataColletion(True))
-                LogFile.loggingData.writeLog(True,theLogFile,Utility.ErrorSyntax.dataColletion(True))
-                os._exit(0)
+                leaving.getOUT(True)
 
-    def Main(self,URL,SC,brow,u,theLogFile,theDir):
+    def doSearchEngine(self,URL,SC,brow,se,theLogFile,theDir,b1):
         if self:
             try:
                 # Running program
                 if(len(URL) <3 or len(SC) < 3 or len(brow) < 3): 
-                    eList=[]
+                    eList=[]# If any of the critiera is missing list error and return
                     eList=Utility.ErrorSyntax.mainError(True)
-                    print(eList[0]+URL+eList[1]+SC+eList[2]+brow)
                     LogFile.loggingData.writeLog(True,theLogFile,eList[0]+URL+eList[1]+SC+eList[2]+brow)
                     return Utility.GenericSyntax.false(True)
                 else:
+                # Display selections in console
                     goodData=Utility.GenericSyntax.SynRnProg(True,URL,brow,SC)
-                    LogFile.loggingData.writeLog(True,theLogFile,goodData)
+                    LogFile.loggingData.writeLog(True,theLogFile,goodData[0])
+                    c=input(goodData[1])
+                    c=c.upper()
+                    if(c!="Y"):
+                        leaving.getOUT(True)
                 # Opening Browser and processing search results
                     y=selBin.sel_Interaction.goodSearch
-                    selBin.sel_Interaction.doSearch(y,b,URL,SC,brow,u,theLogFile,theDir)
+                    selBin.sel_Interaction.doSearch(y,URL,SC,se,theLogFile,theDir,b1)
             except:
                 e=Utility.ErrorSyntax.mainError(True)
                 LogFile.loggingData.writeLog(True,theLogFile,e)
     
-    def getOUT(self):
-        LogFile.loggingData.writeLog(x,theLogFile,Utility.GenericSyntax.quitMsg(True),)
-        os._exit(0)
+
 
 # Creating log file and directory
 dirComp=[]
@@ -90,31 +100,48 @@ LogFile.loggingData.writeLog(x,theLogFile,Utility.GenericSyntax.logTitles(True,0
 # Doing the menus
 mo=Utility.Menu.menuItems(True,0,theLogFile)
 if(mo=="0"):
-    print("This is where the functions for validating a password goes")
-    startMe.getOUT(True)
+    aURL=Utility.TheURL.getUrlValues(True)
+    http=aURL[3]
+    theDom=aURL[4]
+    selBin.procPasswords.passCreds(True, http, theDom, theLogFile,theDir)
+    leaving.getOUT(True)
 elif(mo=="1"):
-    print("This is where the functions for counting images on a given URL")
-    startMe.getOUT(True)
+    urlVars=Utility.TheURL.getUrlValues(True)
+    extensions=Utility.TheURL.imageExtensions(True)
+    #Collect the URL
+    aURL=input(urlVars[0])
+    #Validate the URL
+    extCheck=Utility.TheURL.validateURL(True,aURL,extensions)
+    if(extCheck==False):
+        LogFile.loggingData.writeLog(True,theLogFile,Utility.GenericSyntax.Failure(True, urlVars[1]+aURL, 0))
+        leaving.getOUT(True)
+    LogFile.loggingData.writeLog(True,theLogFile,urlVars[2]+aURL)
+    #Go to the URL and count the images
+    selBin.giveURL.openGivenURl(True,aURL,theLogFile,theDir,urlVars[3])
+    leaving.getOUT(True)
 elif(mo=="2"):
     mi=0 # Setting up menus and gather menu options.
     while (mi<2):  
         m1=startMe.doMenu2(y,mi,theLogFile,theDir)
         if(mi==0):
-            u=m1 # assigning Search Engine
+            s=m1 # assigning Search Engine
         else:
             b=m1 # assigning browser
         mi=mi+1
     LogFile.loggingData.writeLog(x,theLogFile,Utility.GenericSyntax.logTitles(True,1))
-    se=Utility.ProgData.searchEngines(True,int(u))  # Assigning search engine
-    dc=[];dc=startMe.doDataCollection(True,u,theLogFile,theDir) # getting theURL and the Search Criteria
+    # Assigning search engine
+    se=Utility.ProgData.searchEngines(True,int(s)) #This identifies the character used by teh search enging
+    br=Utility.ProgData.browsers(True,int(b)) 
+    # getting theURL and the Search Criteria
+    dc=[];dc=startMe.doDataCollection(True,s,theLogFile,theDir) 
     LogFile.loggingData.writeLog(True,theLogFile,Utility.GenericSyntax.logTitles(True,2))
-    startMe.Main(y,dc[0],dc[1],se,u,theLogFile,theDir)
-    startMe.getOUT(True)
+    startMe.doSearchEngine(y,dc[0],dc[1],br,se,theLogFile,theDir,int(s)) #true, URL, Search Criteria,browser,search engine,log file, directory
+    leaving.getOUT(True)
 elif(mo.upper()=='Q'):
-    startMe.getOUT(True)
+    leaving.getOUT(True)
 else:
     LogFile.loggingData.writeLog(True,theLogFile,"Invalid selection: "+mo)
-    startMe.getOUT(True)
+    leaving.getOUT(True)
     
 
 

@@ -11,8 +11,8 @@ class loggingData():
     log_it=True
     def writeLog(self,theLogFile,theLogEntry):
         if self:
-            logging.basicConfig(filename=theLogFile,level=logging.DEBUG)
-            logging.debug(theLogEntry)
+            logging.basicConfig(filename=theLogFile,level=logging.INFO)
+            logging.info(theLogEntry)
             print("\n"+Utility.ProgData.logDateString(True)+":  "+theLogEntry)
 
     def dirName(self):
@@ -27,7 +27,3 @@ class loggingData():
         if self:
             theLogFile = theDir+"\LogFile_"+theFileString+".log"
             return theLogFile
-
-
-
-        
