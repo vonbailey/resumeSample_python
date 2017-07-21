@@ -20,6 +20,7 @@ Start application by starting the "WebInteraction.py" file in the folder in a do
 2) A menu will appear offering four different options:
 	a) Validate Password Test 
 		i) This will open a sign in page on the interent to demonstrate sign in validation
+		ii) It will also go through the process of managing a forgotten password process.
 	b) Count images on given URL
 		i) The user will be given the option of entering a URL.  Once submitted, the application
 		will open the URL and give a count of the images of 4 different types on the page.
@@ -28,7 +29,8 @@ Start application by starting the "WebInteraction.py" file in the folder in a do
 		application will do a search using the users information and return a count of the 
 		images of 4 different types of included in the search results. 
 
-++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++	
 CURRENT BUGS:
 1) The chrome driver will not go to the designated web page.  It's a chrome issue, continue to search for resolution.  Until resolution discovered, it will message user in console and return.
 
+NEW FEATURE:
+Automated "forgot password" test cases have been added.

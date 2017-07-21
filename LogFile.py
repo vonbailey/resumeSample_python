@@ -27,3 +27,7 @@ class loggingData():
         if self:
             theLogFile = theDir+"\LogFile_"+theFileString+".log"
             return theLogFile
+        
+    def dBug(self,msg):
+        if self:
+            print(Utility.ProgData.logDateString(True)+"----DEBUG: "+msg)

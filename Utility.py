@@ -3,6 +3,7 @@
 # Program Name: ProgResume
 # This module is for generic classes & functions and all data
 
+import traceback
 import LogFile
 import time
 
@@ -25,7 +26,7 @@ class ProgData:
                'errmsg','Automated Password Verification Demo']
     
     def versioning(self):
-        return "3.0"  # Optimized logging process and added saving an image of the search results in the log folder.
+        return "5.0"  # Optimized menu with error coding and added ability to verify a "Forgot Password" automated test.
 
     def dateString(self):
         return time.strftime("%H%M%S%m%d%y")
@@ -71,7 +72,7 @@ class ProgData:
             except:
                 print(ErrorSyntax.setMenuOptionsError())
                 y=ErrorSyntax.ers
-                LogFile.loggingData.writeLog(y,theLogFile,ErrorSyntax.setMenuOptionsError())
+                LogFile.loggingData.writeLog(y,theLogFile,ErrorSyntax.setMenuOptionsError()+traceback.print_stack())
 
     def searchField(self,sf,theLogFile):
         # Attempting to identify the search field name for the correct search engine.
@@ -84,7 +85,7 @@ class ProgData:
         except:
             print (ErrorSyntax.searchFieldError())
             y=ErrorSyntax.ers
-            LogFile.loggingData.writeLog(y,theLogFile,ErrorSyntax.searchFieldError())
+            LogFile.loggingData.writeLog(y,theLogFile,ErrorSyntax.searchFieldError()+traceback.print_stack())
 
     def searchEngines(self,se):
         ses = ["Google","Bing","Yahoo"]
@@ -103,7 +104,7 @@ class Menu():
         except:
             print (ErrorSyntax.menuItems(True))
             y=ErrorSyntax.ers
-            LogFile.loggingData.writeLog(y,theLogFile,ErrorSyntax.menuItems(True))
+            LogFile.loggingData.writeLog(y,theLogFile,ErrorSyntax.menuItems(True)+traceback.print_stack())
 
     def validate_MenuItem(self,x,theLogFile):
         try:
@@ -124,14 +125,25 @@ class Menu():
         except:
             print (ErrorSyntax.menuItems(True))
             y=ErrorSyntax.ers
-            LogFile.loggingData.writeLog(y,theLogFile,ErrorSyntax.validate_MenuItem(x))
+            LogFile.loggingData.writeLog(y,theLogFile,ErrorSyntax.validate_MenuItem(x)+traceback.print_stack())
 
 class GenericSyntax():
     gs=True
     
+    def changePwd(self,x):
+        if(x==0): #Bad Email Address
+            cpw=['orangehatgmail.com','rabbit1234567','Bad Email Address']
+        elif(x==1): # Bad Passwoord, too short
+            cpw=['orangehat@gmail.com','rabbit123','To short of a password']
+        elif(x==2): # Bad Login, too short
+            cpw=['o@m','rabbit1234567','To short of an Email Address']
+        elif(x==3): # Good Passwoord, too short
+            cpw=['orangehat@gmail.com','rabbit1234567','Good Credentials']
+        return cpw,'http://thecityofkothos.com/resume/forgotPassword.html'
+    
     def procCredsError(self,x):
         pre='ERROR: function '
-        pce=[pre+'passCreds()',pre+'getCredFields()',pre+'enterCreds()',pre+'mkFileName()']
+        pce=[pre+'passCreds()',pre+'getCredFields()',pre+'enterCreds()',pre+'mkFileName()',pre+'updtePassword()',pre+'updateFields()']
         return pce[x]
     
     def images(self):
@@ -217,6 +229,13 @@ class Browsers():
 
 class ErrorSyntax():
     ers=True
+    
+    def mainMenuError(self):
+        # Error messages for the Main Menu
+        return ["ERROR: main(creating log file and directory)",
+        "ERROR: main(Menu Option 0)",
+        "ERROR: main(Menu Option 1)",
+        "ERROR: main(Menu Option 2)"]
     def givenURLError(self):
         return "ERROR:  Bad URL given: "
     

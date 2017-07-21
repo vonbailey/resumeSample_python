@@ -7,16 +7,71 @@
 #import selenium
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
-from selenium.webdriver.common.by import By
 
 import time
+import traceback
 import Utility
 import LogFile
-from _overlapped import NULL
 
 
 class procPasswords():
     creds=True
+    
+    def updateFields(self,driver,theLogFile,):
+        try:
+            em=driver.find_element_by_id('emailAddress')
+            p1=driver.find_element_by_id('password1')
+            p2=driver.find_element_by_id('password2') 
+            return em,p1,p2 
+        except:
+            LogFile.loggingData.writeLog(True,theLogFile,Utility.GenericSyntax.procCredsError(True,5)+traceback.print_stack())
+    
+    def updtePassword(self,http,theURL,theLogFile,theDir):
+        try:
+            # Accessing the forgot password page
+            driver=webdriver.Firefox()
+            driver.get(http+theURL)
+            driver.find_element_by_id('fgotPwd').click()
+            x=0
+            while(x<4):
+                # Entering Test Variables
+                y=False
+                creds,nhttp=Utility.GenericSyntax.changePwd(True,x)
+                drFields= procPasswords.updateFields(True,driver,theLogFile,)
+                drFields[0].send_keys(creds[0])
+                drFields[1].send_keys(creds[1])
+                drFields[2].send_keys(creds[1])
+                driver.find_element_by_id('submitEmail').click()
+                fN=creds[2].replace(' ','_')
+                LogFile.loggingData.writeLog(True,theLogFile,creds[2])
+                driver.get_screenshot_as_file(theDir+'\/'+fN+".png")
+                validate=driver.find_element_by_id('errormsg')
+                # Verifying Test Variable results
+                if(x==0):
+                    if(validate.get_attribute("value")=="ERROR: Please enter data in required fields labled in red characters."):
+                        LogFile.loggingData.writeLog(True,theLogFile,creds[2]+"**PASSED**")
+                        y=True
+                elif(x==1):
+                    if(validate.get_attribute("value")=="Password Not long enough.  Must be 12 characters"):
+                        LogFile.loggingData.writeLog(True,theLogFile,creds[2]+"**PASSED**")
+                        y=True
+                elif(x==2):
+                    if(validate.get_attribute("value")=="ERROR: Please enter data in required fields labled in red characters."):
+                        LogFile.loggingData.writeLog(True,theLogFile,creds[2]+"**PASSED**")
+                        y=True
+                elif(x==3):
+                    if(validate.get_attribute("value")=="Successfully updated password"):
+                        LogFile.loggingData.writeLog(True,theLogFile,creds[2]+"**PASSED**")
+                        y=True
+                if(y==False):
+                    LogFile.loggingData.writeLog(True,theLogFile,creds[2]+"**FAILED**")                  
+                x=x+1
+                driver.get(nhttp)
+            # Closing test
+            driver.close()
+        except:
+            LogFile.loggingData.writeLog(True,theLogFile,Utility.GenericSyntax.procCredsError(True,4)+traceback.print_stack())
+    
     def passCreds(self,http,theURL,theLogFile,theDir):
         try:
             cred=Utility.ProgData.getIN(True)
@@ -32,7 +87,7 @@ class procPasswords():
                 z=z+2
             driver.close()
         except:
-            LogFile.loggingData.writeLog(True,theLogFile,Utility.GenericSyntax.procCredsError(True,0))                     
+            LogFile.loggingData.writeLog(True,theLogFile,Utility.GenericSyntax.procCredsError(True,0)+traceback.print_stack())                     
 
     def getCredFields(self,driver,theLogFile):
         try:
@@ -71,7 +126,7 @@ class procPasswords():
 
             driver.get(http+theURL)           
         except:
-            LogFile.loggingData.writeLog(True,theLogFile,Utility.GenericSyntax.procCredsError(True,2)) 
+            LogFile.loggingData.writeLog(True,theLogFile,Utility.GenericSyntax.procCredsError(True,2)+traceback.print_stack()) 
             
 class sel_Interaction():   
     goodSearch=True
@@ -109,7 +164,7 @@ class sel_Interaction():
             return 
         except:
             e=Utility.ErrorSyntax.setBrowserError(True,b)
-            LogFile.loggingData.writeLog(True,theLogFile,Utility.GenericSyntax.Failure(True,e,0))
+            LogFile.loggingData.writeLog(True,theLogFile,Utility.GenericSyntax.Failure(True,e,0)+traceback.print_stack())
 
 
     def countAspects(self,theSource,tp,sc,x,theLogFile,theDir):
@@ -134,7 +189,7 @@ class sel_Interaction():
                 if(cnt<1):
                     LogFile.loggingData.writeLog(True,theLogFile,Utility.ErrorSyntax.missingSC(True,sc))
         except:
-            e=Utility.ErrorSyntax.countAspectsError(True,theSource)
+            e=Utility.ErrorSyntax.countAspectsError(True,theSource)+traceback.print_stack()
             LogFile.loggingData.writeLog(True,theLogFile,e)
 
 class giveURL():
@@ -147,5 +202,5 @@ class giveURL():
             driver.close()
             sel_Interaction.countAspects(True,theSource,0,"",3,theLogFile,theDir)
         except:
-            e=Utility.ErrorSyntax.givenURLError(True)
+            e=Utility.ErrorSyntax.givenURLError(True)+traceback.print_stack()
             LogFile.loggingData.writeLog(True,theLogFile,e+theURL)        
