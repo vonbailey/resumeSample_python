@@ -11,7 +11,6 @@ import selBin
 import os
 import LogFile
 
-
 class leaving():
     def getOUT(self,theLogFile):
         if self:
@@ -20,8 +19,7 @@ class leaving():
 
 class startMe():
     menu=True
-            
-    def doMenu2(self,ms,theLogFile,theDir):
+    def doMenu2(self,ms):
         if self:
             try:
                 # Creating menus and acccepting Menu selection
@@ -44,7 +42,7 @@ class startMe():
                 print(Utility.ErrorSyntax.menuError(True),theDir+traceback.print_stack())
                 leaving.getOUT(True,theLogFile)
 
-    def doDataCollection(self,u,theLogFile,theDir):
+    def doDataCollection(self,u):
         if self:
             try:
                 # Verifying data collection
@@ -60,7 +58,7 @@ class startMe():
                 print(Utility.ErrorSyntax.dataColletion(True)+traceback.print_stack())
                 leaving.getOUT(True,theLogFile)
 
-    def doSearchEngine(self,URL,SC,brow,se,theLogFile,theDir,b1):
+    def doSearchEngine(self,URL,SC,brow,se,b1):
         if self:
             try:
                 # Running program
@@ -84,9 +82,18 @@ class startMe():
                 e=Utility.ErrorSyntax.mainError(True)+traceback.print_stack()
                 LogFile.loggingData.writeLog(True,theLogFile,e)
 
+class gVars():
+    def globalvars(self):
+        global theDir
+        theDir="null"
+        global theLogFile 
+        theLogFile="null" 
+      
+
 def main():
     try:
         mmError=Utility.ErrorSyntax.mainMenuError(True)
+        gVars.globalvars(True)
         try:
             # Creating log file and directory
             dirComp=[]
@@ -134,7 +141,7 @@ def main():
             try:
                 mi=0 # Setting up menus and gather menu options.
                 while (mi<2):  
-                    m1=startMe.doMenu2(y,mi,theLogFile,theDir)
+                    m1=startMe.doMenu2(y,mi)
                     if(mi==0):
                         s=m1 # assigning Search Engine
                     else:
@@ -145,9 +152,9 @@ def main():
                 se=Utility.ProgData.searchEngines(True,int(s)) #This identifies the character used by teh search enging
                 br=Utility.ProgData.browsers(True,int(b)) 
                 # getting theURL and the Search Criteria
-                dc=[];dc=startMe.doDataCollection(True,s,theLogFile,theDir) 
+                dc=[];dc=startMe.doDataCollection(True,s) 
                 LogFile.loggingData.writeLog(True,theLogFile,Utility.GenericSyntax.logTitles(True,2))
-                startMe.doSearchEngine(y,dc[0],dc[1],br,se,theLogFile,theDir,int(s)) #true, URL, Search Criteria,browser,search engine,log file, directory
+                startMe.doSearchEngine(y,dc[0],dc[1],br,se,int(s)) #true, URL, Search Criteria,browser,search engine,log file, directory
                 leaving.getOUT(True,theLogFile)
             except:
                 LogFile.loggingData.writeLog(True,theLogFile,mmError[3]+traceback.print_stack())
